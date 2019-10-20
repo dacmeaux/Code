@@ -1,7 +1,7 @@
 <?php
+require_once 'interface.Validate.php';
 
-
-class Result
+class Result implements ValidateInterface
 {
     private $data;
 
@@ -11,6 +11,11 @@ class Result
 
         if( !is_array($this->data) )
             $this->data = array($data);
+    }
+
+    public function isValid($name, $value)
+    {
+        // TODO: Implement isValid() method.
     }
 
     public function getData()

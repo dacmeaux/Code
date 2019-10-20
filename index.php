@@ -3,6 +3,8 @@ require_once 'class.Data.php';
 require_once 'class.Result.php';
 require_once 'class.Search.php';
 require_once 'class.Response.php';
+require_once 'class.Document.php';
+require_once 'class.NumberValidator.php';
 
 $template = file_get_contents('template.html');
 $response = new Response();
@@ -11,6 +13,10 @@ $search = $response->getSearch();
 $code = $response->getCode();
 $message = $response->getMessage();
 $result_count = $response->getResultCount();
+
+
+$document_obj = Document::documentFactory(new NumberValidator(1));
+echo '<pre>Document 1: '. var_export($document_obj, true) .'</pre>';
 
 echo '<pre>Data: '. var_export($data, true) .'</pre>';
 echo '<pre>Code: '. var_export($code, true) .'</pre>';

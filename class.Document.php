@@ -1,44 +1,69 @@
 <?php
-require_once 'class.Number.php';
+require_once 'class.Validator.php';
+require_once 'class.NumberValidator.php';
+require_once 'class.BooleanValidator.php';
+require_once 'class.StringValidator.php';
+require_once 'class.ObjectValidator.php';
+require_once 'class.Search.php';
 require_once 'class.NVP.php';
 
 final class Document
 {
     private $data_file = 'data.json';
-    private $total_records = 0;
-    private $start_at = 0;
-    private $max_records = 0;
-    private $attr_obj = null;
+    private $json_data = null;
+    private $document_name = '';
+    private $published = false;
+    private $document_attributes = array();
 
-    public function __construct(Number $id)
+    public function __construct(NumberValidator $number_obj)
     {
-        $json_data = json_decode(file_get_contents($this->data_file, true));
-        $this->setState('total_records', $json_data[$id]->total_records);
-        $this->setState('max_records', $json_data[$id]->max_records);
-        $this->setState('start_at', $json_data[$id]->start_at);
+        $id = $number_obj->getData();
+        $json_data = $this->json_data = json_decode(file_get_contents($this->data_file, true));
+        var_export($json_data);
 
-        $this->attr_obj = new NVP($json_data[$id]->document_attributes);
+        $this->setState('document_name', $json_data->Data[$id]->document_name);
+        $this->setState('published', $json_data->Data[$id]->published);
+
+        foreach( $json_data->Data[$id]->document_attributes as $document_attribute )
+            $this->document_attributes[] = new NVP($document_attribute);
     }
 
     private function setState($name, $value)
     {
-        $numberValidator = new Number($value);
-        $number = $numberValidator->getData();
-        $this->{$name} = $number;
+        $validator_obj = new Validator();
+        $validator_obj->addValidator(new NumberValidator());
+        $validator_obj->addValidator(new BooleanValidator());
+        $validator_obj->addValidator(new StringValidator());
+        $validator_obj->addValidator(new ObjectValidator());
+        $value = $validator_obj->validate($name, $value);
+        $this->{$name} = $value;
     }
 
     public function getTotalRecords()
     {
-        return $this->total_records;
+        $search_obj = new Search($this->json_data);
+        return $search_obj->getTotalRecords();
     }
 
     public function getStartAt()
     {
-        return $this->start_at;
+        $search_obj = new Search($this->json_data);
+        return $search_obj->getStartAt();
     }
 
     public function getMaxRecords()
     {
-        return $this->max_records;
+        $search_obj = new Search($this->json_data);
+        return $search_obj->getMaxRecords();
+    }
+
+    public function getDocumentAttributes()
+    {
+        return $this->document_attributes;
+    }
+
+    public static function documentFactory($id)
+    {
+        return new Document($id);
     }
 }

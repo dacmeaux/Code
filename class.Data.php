@@ -19,6 +19,11 @@ class Data implements ValidateInterface
         $this->data = $data;
     }
 
+    public function isValid($name, $value)
+    {
+        // TODO: Implement isValid() method.
+    }
+
     public function getData()
     {
         return $this->data;

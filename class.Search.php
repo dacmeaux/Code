@@ -10,9 +10,9 @@ class Search implements ValidateInterface
     public function __construct($data)
     {
         // Set defaults
-        $this->data['total_records'] = 0;
-        $this->data['start_at'] = 0;
-        $this->data['max_records'] = 0;
+        $this->total_records = 0;
+        $this->start_at = 0;
+        $this->max_records = 0;
 
         // Ensure that data is an object
         if( !is_object($data) )
@@ -30,6 +30,11 @@ class Search implements ValidateInterface
 
     }
 
+    public function isValid($name, $value)
+    {
+        // TODO: Implement isValid() method.
+    }
+
     public function getData()
     {
         return (object) array(
@@ -37,5 +42,20 @@ class Search implements ValidateInterface
             'max_records'=>$this->max_records,
             'start_at'=>$this->start_at
         );
+    }
+
+    public function getTotalRecords()
+    {
+        return $this->total_records;
+    }
+
+    public function getStartAt()
+    {
+        return $this->start_at;
+    }
+
+    public function getMaxRecords()
+    {
+        return $this->max_records;
     }
 }
