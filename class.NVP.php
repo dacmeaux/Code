@@ -1,20 +1,18 @@
 <?php
-require_once 'interface.Validate.php';
 
-final class NVP implements ValidateInterface
+final class NVP
 {
-    private $attrs = array();
+    private $name = '';
+    private $value = '';
 
-    public function __construct($attrs)
+    public function __construct($attr)
     {
-        foreach( $attrs as $attr_obj )
-        {
-            $this->attrs[$attr_obj->name] = $attr_obj->value;
-        }
+        $this->name = $attr->name;
+        $this->value = $attr->value;
     }
 
     public function getData()
     {
-        return $this->attrs;
+        return array($this->name=>$this->value);
     }
 }
