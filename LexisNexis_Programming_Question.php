@@ -16,14 +16,14 @@
 // 		 Data should have an empty array as its default value
 
 
-interface ResponseInterface
-{
-	public function getCode();
-	public function getMessage();
-	public function getResultCount();
-	public function getData();
-	public function getSearch();
-}
+//interface ResponseInterface
+//{
+//	public function getCode();
+//	public function getMessage();
+//	public function getResultCount();
+//	public function getData();
+//	public function getSearch();
+//}
 
 
 $json = '{

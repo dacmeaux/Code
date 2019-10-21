@@ -4,28 +4,31 @@ require_once 'class.NumberValidator.php';
 require_once 'class.BooleanValidator.php';
 require_once 'class.StringValidator.php';
 require_once 'class.ObjectValidator.php';
+require_once 'class.GenericValidator.php';
+require_once 'class.ArrayValidator.php';
 require_once 'class.Search.php';
 require_once 'class.NVP.php';
 
 final class Document
 {
-    private $data_file = 'data.json';
-    private $json_data = null;
+    private $id = 0;
     private $document_name = '';
     private $published = false;
     private $document_attributes = array();
 
-    public function __construct(NumberValidator $number_obj)
+    public function __construct(ObjectValidator $valid_obj)
     {
-        $id = $number_obj->getData();
-        $json_data = $this->json_data = json_decode(file_get_contents($this->data_file, true));
-        var_export($json_data);
+        $_data = $valid_obj->getData();
+        $this->setState('id', $_data->id);
+        $this->setState('document_name', $_data->document_name);
+        $this->setState('published', $_data->published);
 
-        $this->setState('document_name', $json_data->Data[$id]->document_name);
-        $this->setState('published', $json_data->Data[$id]->published);
+//        $this->setState('my_name', null);
+        $attrs = array();
+        foreach( $_data->document_attributes as $document_attribute )
+            $attrs[] = new NVP($document_attribute);
 
-        foreach( $json_data->Data[$id]->document_attributes as $document_attribute )
-            $this->document_attributes[] = new NVP($document_attribute);
+        $this->setState('document_attributes', $attrs);
     }
 
     private function setState($name, $value)
@@ -34,36 +37,16 @@ final class Document
         $validator_obj->addValidator(new NumberValidator());
         $validator_obj->addValidator(new BooleanValidator());
         $validator_obj->addValidator(new StringValidator());
+        $validator_obj->addValidator(new ArrayValidator());
         $validator_obj->addValidator(new ObjectValidator());
+        // Generic validator is a catchall and converts everything to a string
+//        $validator_obj->addValidator(new GenericValidator());
         $value = $validator_obj->validate($name, $value);
         $this->{$name} = $value;
     }
 
-    public function getTotalRecords()
+    public static function documentFactory(ObjectValidator $valid_obj)
     {
-        $search_obj = new Search($this->json_data);
-        return $search_obj->getTotalRecords();
-    }
-
-    public function getStartAt()
-    {
-        $search_obj = new Search($this->json_data);
-        return $search_obj->getStartAt();
-    }
-
-    public function getMaxRecords()
-    {
-        $search_obj = new Search($this->json_data);
-        return $search_obj->getMaxRecords();
-    }
-
-    public function getDocumentAttributes()
-    {
-        return $this->document_attributes;
-    }
-
-    public static function documentFactory($id)
-    {
-        return new Document($id);
+        return new Document($valid_obj);
     }
 }

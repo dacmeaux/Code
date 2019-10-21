@@ -3,13 +3,26 @@ require_once 'interface.Validate.php';
 
 class ObjectValidator implements ValidateInterface
 {
-    private $object_fields = array('document_attributes');
+    private $object_fields = array('document', 'document_attributes');
     private $object = null;
 
     public function __construct($object = null)
     {
-        if( !is_null($object) && is_object($object) ){
+        if( is_null($object) )
+            return;
+
+        if( is_object($object) )
             $this->object = $object;
+        else
+        {
+            try{
+                throw new ErrorException('Could not validate '. var_export($object, true) .' as object');
+            }
+            catch (ErrorException $e)
+            {
+                die($e->getMessage() ."\n". $e->getTraceAsString());
+
+            }
         }
     }
 

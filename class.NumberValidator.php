@@ -8,8 +8,21 @@ class NumberValidator implements ValidateInterface
 
     public function __construct($number = null)
     {
-        if( !is_null($number) && is_numeric($number) && $number > -1 ){
+        if( is_null($number) )
+            return;
+
+        if( is_int($number) && $number > -1 )
             $this->number = $number;
+        else
+        {
+            try{
+                throw new ErrorException('Could not validate '. var_export($number, true) .' as number');
+            }
+            catch (ErrorException $e)
+            {
+                die($e->getMessage() ."\n". $e->getTraceAsString());
+
+            }
         }
     }
 

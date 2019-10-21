@@ -8,8 +8,21 @@ class BooleanValidator implements ValidateInterface
 
     public function __construct($bool = null)
     {
-        if( !is_null($bool) && is_bool($bool) ){
+        if( is_null($bool) )
+            return;
+
+        if( is_bool($bool) )
             $this->bool = $bool;
+        else
+        {
+            try{
+                throw new ErrorException('Could not validate '. var_export($bool, true) .' as boolean');
+            }
+            catch (ErrorException $e)
+            {
+                die($e->getMessage() ."\n". $e->getTraceAsString());
+
+            }
         }
     }
 

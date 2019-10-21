@@ -25,7 +25,7 @@ class Response implements ResponseInterface{
     public function getData()
     {
         // TODO: Implement getData() method
-        return $this->data_obj->Data;
+        return $this->data_obj;
     }
 
     public function getResultCount()

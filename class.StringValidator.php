@@ -3,13 +3,26 @@ require_once 'interface.Validate.php';
 
 class StringValidator implements ValidateInterface
 {
-    private $string_fields = array('css_class');
-    private $string = null;
+    private $string_fields = array('css_class', 'document_name');
+    private $string = '';
 
     public function __construct($string = null)
     {
-        if( !is_null($string) && is_string($string) ){
+        if( is_null($string) )
+            return;
+
+        if( is_string($string) )
             $this->string = $string;
+        else
+        {
+            try{
+                throw new ErrorException('Could not validate '. var_export($string, true) .' as string');
+            }
+            catch (ErrorException $e)
+            {
+                die($e->getMessage() ."\n". $e->getTraceAsString());
+
+            }
         }
     }
 

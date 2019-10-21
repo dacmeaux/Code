@@ -17,6 +17,13 @@ class Validator
                 return $validator->getData();
         }
 
-        return false;
+        try{
+            throw new ErrorException('Could not validate '. $name .' with value '. var_export($value, true));
+        }
+        catch (ErrorException $e)
+        {
+            die($e->getMessage() ."\n". $e->getTraceAsString());
+
+        }
     }
 }
