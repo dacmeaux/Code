@@ -1,4 +1,5 @@
 <?php
+require_once 'class.Validator.php';
 require_once 'interface.Validate.php';
 
 class BooleanValidator implements ValidateInterface
@@ -14,16 +15,7 @@ class BooleanValidator implements ValidateInterface
         if( is_bool($bool) )
             $this->bool = $bool;
         else
-        {
-            try{
-                throw new ErrorException('Could not validate '. var_export($bool, true) .' as boolean');
-            }
-            catch (ErrorException $e)
-            {
-                die($e->getMessage() ."\n". $e->getTraceAsString());
-
-            }
-        }
+            Validator::failed($bool, 'boolean');
     }
 
     public function isValid($name, $value)
@@ -33,9 +25,10 @@ class BooleanValidator implements ValidateInterface
 
         if( is_bool($value) ){
             $this->bool = $value;
+            return true;
         }
 
-        return true;
+        return false;
     }
 
     public function getData()

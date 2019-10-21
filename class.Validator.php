@@ -26,4 +26,16 @@ class Validator
 
         }
     }
+
+    public static function failed($subject, $type)
+    {
+        try{
+            throw new ErrorException('Could not validate '. var_export($subject, true) .' as '. $type);
+        }
+        catch (ErrorException $e)
+        {
+            die($e->getMessage() ."\n". $e->getTraceAsString());
+
+        }
+    }
 }

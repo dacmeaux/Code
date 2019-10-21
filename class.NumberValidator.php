@@ -1,9 +1,10 @@
 <?php
+require_once 'class.Validator.php';
 require_once 'interface.Validate.php';
 
 class NumberValidator implements ValidateInterface
 {
-    private $number_fields = array('sub_product_id', 'id');
+    private $number_fields = array('sub_product_id', 'id', 'value');
     private $number = 0;
 
     public function __construct($number = null)
@@ -11,19 +12,10 @@ class NumberValidator implements ValidateInterface
         if( is_null($number) )
             return;
 
-        if( is_int($number) && $number > -1 )
+        if( is_numeric($number) && $number > -1 )
             $this->number = $number;
         else
-        {
-            try{
-                throw new ErrorException('Could not validate '. var_export($number, true) .' as number');
-            }
-            catch (ErrorException $e)
-            {
-                die($e->getMessage() ."\n". $e->getTraceAsString());
-
-            }
-        }
+            Validator::failed($number, 'number');
     }
 
     public function isValid($name, $value)
@@ -33,9 +25,10 @@ class NumberValidator implements ValidateInterface
 
         if( is_numeric($value) && $value > -1 ){
             $this->number = $value;
+            return true;
         }
 
-        return true;
+        return false;
     }
 
     public function getData()

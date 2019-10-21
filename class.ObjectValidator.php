@@ -1,4 +1,5 @@
 <?php
+require_once 'class.Validator.php';
 require_once 'interface.Validate.php';
 
 class ObjectValidator implements ValidateInterface
@@ -14,16 +15,7 @@ class ObjectValidator implements ValidateInterface
         if( is_object($object) )
             $this->object = $object;
         else
-        {
-            try{
-                throw new ErrorException('Could not validate '. var_export($object, true) .' as object');
-            }
-            catch (ErrorException $e)
-            {
-                die($e->getMessage() ."\n". $e->getTraceAsString());
-
-            }
-        }
+            Validator::failed($object, 'object');
     }
 
     public function isValid($name, $value)
@@ -33,9 +25,10 @@ class ObjectValidator implements ValidateInterface
 
         if( is_object($value) ){
             $this->object = $value;
+            return true;
         }
 
-        return true;
+        return false;
     }
 
     public function getData()

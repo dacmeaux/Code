@@ -24,10 +24,9 @@ final class Document
         $this->setState('document_name', $_data->document_name);
         $this->setState('published', $_data->published);
 
-//        $this->setState('my_name', null);
         $attrs = array();
         foreach( $_data->document_attributes as $document_attribute )
-            $attrs[] = new NVP($document_attribute);
+            $attrs[] = new NVP(new ObjectValidator($document_attribute));
 
         $this->setState('document_attributes', $attrs);
     }

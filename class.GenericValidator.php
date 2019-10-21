@@ -1,4 +1,5 @@
 <?php
+require_once 'class.Validator.php';
 require_once 'interface.Validate.php';
 
 class GenericValidator implements ValidateInterface
@@ -12,14 +13,18 @@ class GenericValidator implements ValidateInterface
 
         if( !is_int($generic) && !is_array($generic) && !is_object($generic) && !is_bool($generic) && !is_string($generic) )
             $this->generic = (string) $generic;
+        else
+            Validator::failed($generic, 'generic');
     }
 
     public function isValid($name, $value)
     {
-        if( !is_int($value) && !is_array($value) && !is_object($value) && !is_bool($value) && !is_string($value) )
-            $this->generic = (string) $value;
+        if( !is_int($value) && !is_array($value) && !is_object($value) && !is_bool($value) && !is_string($value) ) {
+            $this->generic = (string)$value;
+            return true;
+        }
 
-        return true;
+        return false;
     }
 
     public function getData()

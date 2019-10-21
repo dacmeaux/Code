@@ -1,4 +1,5 @@
 <?php
+require_once 'class.Validator.php';
 require_once 'interface.Validate.php';
 
 class ArrayValidator implements ValidateInterface
@@ -14,16 +15,7 @@ class ArrayValidator implements ValidateInterface
         if( is_array($array)  )
             $this->array = $array;
         else
-        {
-            try{
-                throw new ErrorException('Could not validate '. var_export($array, true) .' as array');
-            }
-            catch (ErrorException $e)
-            {
-                die($e->getMessage() ."\n". $e->getTraceAsString());
-
-            }
-        }
+            Validator::failed($array, 'array');
     }
 
     public function isValid($name, $value)
@@ -33,9 +25,10 @@ class ArrayValidator implements ValidateInterface
 
         if( is_array($value) ){
             $this->array = $value;
+            return true;
         }
 
-        return true;
+        return false;
     }
 
     public function getData()

@@ -1,9 +1,10 @@
 <?php
+require_once 'class.Validator.php';
 require_once 'interface.Validate.php';
 
 class StringValidator implements ValidateInterface
 {
-    private $string_fields = array('css_class', 'document_name');
+    private $string_fields = array('css_class', 'document_name', 'name', 'value');
     private $string = '';
 
     public function __construct($string = null)
@@ -14,16 +15,7 @@ class StringValidator implements ValidateInterface
         if( is_string($string) )
             $this->string = $string;
         else
-        {
-            try{
-                throw new ErrorException('Could not validate '. var_export($string, true) .' as string');
-            }
-            catch (ErrorException $e)
-            {
-                die($e->getMessage() ."\n". $e->getTraceAsString());
-
-            }
-        }
+            Validator::failed($string, 'string');
     }
 
     public function isValid($name, $value)
@@ -33,9 +25,10 @@ class StringValidator implements ValidateInterface
 
         if( is_string($value) ){
             $this->string = $value;
+            return true;
         }
 
-        return true;
+        return false;
     }
 
     public function getData()
