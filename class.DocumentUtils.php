@@ -2,7 +2,6 @@
 require_once 'interface.ResponseInterface.php';
 require_once 'class.Document.php';
 
-
 final class DocumentUtils
 {
     private function __construct(){}
@@ -15,8 +14,6 @@ final class DocumentUtils
         foreach( $json_data->Data as $_data )
         {
             $object_validator = new ObjectValidator($_data);
-            // Test validator
-//            $object_validator = new ObjectValidator(array());
             $document_obj = Document::documentFactory($object_validator);
             $documents[] = $document_obj;
         }

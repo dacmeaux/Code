@@ -9,6 +9,7 @@ require_once 'class.ArrayValidator.php';
 require_once 'class.Search.php';
 require_once 'class.NVP.php';
 
+
 final class Document
 {
     private $id = 0;
@@ -39,7 +40,8 @@ final class Document
         $validator_obj->addValidator(new StringValidator());
         $validator_obj->addValidator(new ArrayValidator());
         $validator_obj->addValidator(new ObjectValidator());
-        // Generic validator is a catchall and converts everything to a string
+        // Generic validator is a catchall and
+        // converts everything to a string
 //        $validator_obj->addValidator(new GenericValidator());
         $value = $validator_obj->validate($name, $value);
         $this->{$name} = $value;
