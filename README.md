@@ -1,4 +1,4 @@
- PART 1
+ **PART 1**
 
 You are given the below ResponseInterface and json blob
 
@@ -135,7 +135,7 @@ $json = '{
 
 
 
-PART 2
+**PART 2**
 
 In the provided JSON Blob the Data property contained a collection of "Documents". Write two classes
 
